@@ -197,7 +197,7 @@ bool CANTalonDriveTrain::AutoTurn(double desiredAngle)
 	return true;
 }
 
-bool CANTalonDriveTrain::AutoTurnCorrect(double desiredAngle, double correctTurnSpeed)
+bool CANTalonDriveTrain::AutoTurnCorrect(double desiredAngle)
 {
 	currentAngle = m_pGyro->GetAngle();
 	angleLeftToTurn = desiredAngle - currentAngle;
@@ -207,13 +207,13 @@ bool CANTalonDriveTrain::AutoTurnCorrect(double desiredAngle, double correctTurn
 	{
 		if((abs(desiredAngle) - abs(currentAngle)) > 0)
 		{
-			m_leftMasterDrive.Set(calculatedSpeed * correctTurnSpeed);
-			m_rightMasterDrive.Set(calculatedSpeed * correctTurnSpeed);
+			m_leftMasterDrive.Set(calculatedSpeed);
+			m_rightMasterDrive.Set(calculatedSpeed);
 		}
 		else
 		{
-			m_leftMasterDrive.Set(-calculatedSpeed * correctTurnSpeed);
-			m_rightMasterDrive.Set(-calculatedSpeed * correctTurnSpeed);
+			m_leftMasterDrive.Set(-calculatedSpeed);
+			m_rightMasterDrive.Set(-calculatedSpeed);
 		}
 		return false;
 	}
