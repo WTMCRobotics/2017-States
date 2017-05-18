@@ -25,103 +25,100 @@
 //#define MODE_Position
 
 
-
 class CANTalonDriveTrain
 {
-private:
-	// motor controllers
-	CANTalon m_rightMasterDrive {CAN_ID_RIGHTMASTER};
-	CANTalon m_rightSlaveDrive  {CAN_ID_RIGHTSLAVE};
-	CANTalon m_leftSlaveDrive   {CAN_ID_LEFTSLAVE};
-	CANTalon m_leftMasterDrive  {CAN_ID_LEFTMASTER};
+	private:
+		// Initialize motor controller objects for moving the robot
+		CANTalon m_rightMasterDrive {CAN_ID_RIGHTMASTER};
+		CANTalon m_rightSlaveDrive  {CAN_ID_RIGHTSLAVE};
+		CANTalon m_leftSlaveDrive   {CAN_ID_LEFTSLAVE};
+		CANTalon m_leftMasterDrive  {CAN_ID_LEFTMASTER};
 
-	double m_leftTarget  = 0.0;
-	double m_rightTarget = 0.0;
+		// Initialize pointers for the Xbox controller and the gyro
+		frc::XboxController* m_pController;
+		frc::ADXRS450_Gyro*  m_pGyro;
 
-	double m_arcadeYAxisTarget = 0.0;
+		// Initialize variables to store the command for both the left and right side
+		double m_leftTarget  = 0.0;
+		double m_rightTarget = 0.0;
 
-	double encVelDiff = 0.0;
-	double adjustBy = driveStraightAdjustment;
+		// Initialize variables to store encoder velocity difference
+		double encVelDiff = 0.0;
 
-	double m_leftSpeed	  	 = 0.0;
-	double m_rightSpeed   	 = 0.0;
-	double m_leftPosition 	 = 0.0;
-	double m_rightPosition 	 = 0.0;
-	double m_leftEncoderPos  = 0.0;
-	double m_rightEncoderPos = 0.0;
-	double m_leftEncoderVel  = 0.0;
-	double m_rightEncoderVel = 0.0;
+		// Initialize variables to store speed, position, encoder position, and encoder velocity
+		// for both the left and right side
+		double m_leftSpeed	  	 = 0.0;
+		double m_leftPosition 	 = 0.0;
+		double m_leftEncoderPos  = 0.0;
+		double m_leftEncoderVel  = 0.0;
+		double m_rightSpeed   	 = 0.0;
+		double m_rightPosition 	 = 0.0;
+		double m_rightEncoderPos = 0.0;
+		double m_rightEncoderVel = 0.0;
 
-	double revolutionsDone = 0;
-	double calculatedSpeed = 0;
-	double currentAngle = 0;
-	double angleLeftToTurn = 0;
+		// Initialize variables to use in autonomous
+		double revolutionsDone = 0;
+		double calculatedSpeed = 0;
+		double currentAngle = 0;
+		double angleLeftToTurn = 0;
 
-	double m_speedFactor = .25;
+		// Initialize variable to scale speed easily
+		double m_speedFactor = 1;
 
-	double m_startAngle		= 0.0;
-	double m_endAngle		= 0.0;
-	double m_deltaAngle		= 0.0;
+		// Function to test if command is past deadband
+		double Deadband(double commandValue);
 
-	double m_startPosition 	= 0.0;
-	double m_endPosition	= 0.0;
-	double m_deltaPosition 	= 0.0;
+	public:
+		// Constructor and destructor
+		CANTalonDriveTrain(frc::XboxController* pController, frc::ADXRS450_Gyro* pGyro);
+		virtual ~CANTalonDriveTrain();
 
-	// pointers to global objects
-	frc::XboxController* m_pController;
-	frc::ADXRS450_Gyro*  m_pGyro;
+		// Stop motor
+		void Stop();
 
+		// Update variables with current encoder values, position, and speed
+		void UpdateStats(void);
 
-public:
-	CANTalonDriveTrain(frc::XboxController* pController, frc::ADXRS450_Gyro* pGyro);
-	virtual ~CANTalonDriveTrain();
+		// Update motors based on XBox controller
+		void Update(double rightCommand, double leftCommand, bool slowSpeed);
 
-	void Stop();
-	void UpdateStats(void);
-	void Update(double rightCommand, double leftCommand, bool slowSpeed);
-	void ArcadeDrive(double commandYAxis, double commandXAxis, bool slowSpeed);
+		// Functions for driving straight with encoders or with gyro
+		// AutoDriveStraightEnc not implemented
+		void AutoDriveStraightEnc(double rightCommand, double leftCommand);
+		void AutoDriveStraightGyro(double rightCommand, double leftCommand);
+		// Function that moves robot straight
+		bool AutoMove(double desiredRevolutions, double leftSpeed, double rightSpeed);
+		// Function for finding the value to set motors to in order to turn
+		void AutoCalculateTurn(double desiredAngle, double turnSpeed);
+		// Function that turns robot
+		bool AutoTurn(double desiredAngle);
+		// Function that corrects the robot to face the desired angle
+		bool AutoTurnCorrect(double desiredAngle);
 
-	void AutoDriveStraightEnc(double rightCommand, double leftCommand);
-	void AutoDriveStraightGyro(double rightCommand, double leftCommand);
-	void AutoCalculateTurn(double desiredAngle, double turnSpeed);
-	bool AutoTurn(double desiredAngle);
-	bool AutoTurnCorrect(double desiredAngle);
-	bool AutoMove(double desiredRevolutions, double leftSpeed, double rightSpeed);
+		// Returns the current encoder velocity difference
+		double GetEncoderVelocityDifference(void) {return encVelDiff;}
 
-	void SetSpeedFactor(double speedFactor) { m_speedFactor = fmax(0.0, fmin(m_speedFactor, 1.0)); }
-	double GetSpeedFactor(void) { return m_speedFactor; }
+		// Return values of the motor command, speed, position, encoder position, and encoder velocity
+		// for both the left and right side
+		double GetLeftTarget(void)		{ return m_leftTarget;}
+		double GetLeftSpeed(void)   	{ return m_leftSpeed;}
+		double GetLeftPosition(void) 	{ return m_leftPosition;}
+		double GetLeftEncoderPos(void) 	{ return m_leftEncoderPos;}
+		double GetLeftEncoderVel(void) 	{ return m_leftEncoderVel;}
+		double GetRightTarget(void) 	{ return m_rightTarget;}
+		double GetRightSpeed(void)  	{ return m_rightSpeed;}
+		double GetRightPosition(void) 	{ return m_rightPosition;}
+		double GetRightEncoderPos(void) { return m_rightEncoderPos;}
+		double GetRightEncoderVel(void) { return m_rightEncoderVel;}
 
-	double GetEncoderVelocityDifference(void) {return encVelDiff;}
+		// Function to reset encoders
+		void resetEncoders(void) {m_leftMasterDrive.SetPosition(0); m_rightMasterDrive.SetPosition(0);}
 
-	double GetLeftSpeed(void)   	{ return m_leftSpeed;}
-	double GetRightSpeed(void)  	{ return m_rightSpeed;}
-	double GetLeftPosition(void) 	{ return m_leftPosition;}
-	double GetRightPosition(void) 	{ return m_rightPosition;}
-	double GetLeftEncoderPos(void) 	{ return m_leftEncoderPos;}
-	double GetRightEncoderPos(void) { return m_rightEncoderPos;}
-	double GetLeftEncoderVel(void) 	{ return m_leftEncoderVel;}
-	double GetRightEncoderVel(void) { return m_rightEncoderVel;}
+		// Function to update variables on the dashboard
+		void DriveTrainUpdateDashboard(void);
 
-	void resetEncoders(void) {m_leftMasterDrive.SetPosition(0); m_rightMasterDrive.SetPosition(0);}
-	void DriveTrainUpdateDashboard(void);
-
-	void setBrakeMode(bool brakeOn);
-
-
-	double GetLeftTarget(void)		{ return m_leftTarget;}
-	double GetRightTarget(void) 	{ return m_rightTarget;}
-
-	double GetStartPosition(void) 	{ return m_startPosition;}
-	double GetEndPosition(void)  	{ return m_endPosition;}
-	double GetDeltaPosition(void)  	{ return m_deltaPosition;}
-
-	double GetStartAngle(void) 	{ return m_startAngle;}
-	double GetEndAngle(void)  	{ return m_endAngle;}
-	double GetDeltaAngle(void)  	{ return m_deltaAngle;}
-
-private:
-	double Deadband(double commandValue);
-
+		// Function to turn on the brakes for the motors
+		void setBrakeMode(bool brakeOn);
 };
 
 #endif /* CAN_TALON_DRIVETRAIN_H_ */

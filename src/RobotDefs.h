@@ -42,8 +42,6 @@
 #define autoSpeedFactor				.3
 #define kSlowSpeedFactor			.2
 
-#define GEARLIFT_COMMAND_DEADBAND	0.2
-
 // Digital Inputs
 //
 #define	DIO_SWITCH_GEARLIFT_DOWN	0
@@ -58,6 +56,7 @@
 #define PCM_CHANNEL_CAMERA_LIGNTS 	2
 
 #define GEAR_LIFT_COMMAND_DEADBAND	.5
+#define WINCH_COMMAND_DEADBAND 		.2
 
 // Autonomous mode constants
 //
@@ -67,7 +66,7 @@
 #define driveStraightAdjustment		0.65
 #define turnError					0.1
 
-// starting location 1 (LEFT lane for Red Alliance, RIGHT for Blue Alliance)
+// starting location 1
 #define kStart1Angle_0		  60
 #define kStart1Dist_0		  75//4.00
 #define kStart1SpeedLf_0	  0.5
@@ -77,7 +76,7 @@
 #define kStart1SpeedLf_1	  .5
 #define kStart1SpeedRt_1	  .5
 
-// starting location 1 (CENTER lane for both Alliances)
+// starting location 1
 #define kStart2Angle_0		+0.0
 #define kStart2Dist_0			100
 #define kStart2SpeedLf_0	  0.5
@@ -91,7 +90,7 @@
 #define kStart2SpeedLf_2	  0
 #define kStart2SpeedRt_2	  0
 
-// starting location 3 (RIGHT lane for Red Alliance, LEFT for Blue Alliance)
+// starting location 3
 #define kStart3Angle_0		-60
 #define kStart3Dist_0		  75
 #define kStart3SpeedLf_0	  0.35
