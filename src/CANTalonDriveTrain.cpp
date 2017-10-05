@@ -27,7 +27,7 @@ CANTalonDriveTrain::CANTalonDriveTrain(frc::XboxController* pController, frc::AD
 	m_leftMasterDrive.SetControlMode(CANSpeedController::kSpeed);
 	m_leftMasterDrive.Set(0.0);
 	m_leftMasterDrive.SetFeedbackDevice(CANTalon::QuadEncoder);
-	m_leftMasterDrive.ConfigEncoderCodesPerRev(DRIVE_ENCDR_STEPS * 4);
+	m_leftMasterDrive.ConfigEncoderCodesPerRev(DRIVE_ENCDR_STEPS);
 	m_leftMasterDrive.ConfigPeakOutputVoltage(+12.0f, -12.0f);
 	m_leftMasterDrive.SetVoltageRampRate(DRIVE_RAMP_VoltsPerSec);
 	m_leftMasterDrive.SetSensorDirection(true);
@@ -37,7 +37,7 @@ CANTalonDriveTrain::CANTalonDriveTrain(frc::XboxController* pController, frc::AD
 	m_rightMasterDrive.SetControlMode(CANSpeedController::kSpeed);
 	m_rightMasterDrive.Set(0.0);
 	m_rightMasterDrive.SetFeedbackDevice(CANTalon::QuadEncoder);
-	m_rightMasterDrive.ConfigEncoderCodesPerRev(DRIVE_ENCDR_STEPS *  4);
+	m_rightMasterDrive.ConfigEncoderCodesPerRev(DRIVE_ENCDR_STEPS);
 	m_rightMasterDrive.ConfigNominalOutputVoltage(+0.0f, -0.0f);
 	m_rightMasterDrive.ConfigPeakOutputVoltage(+12.0f, -12.0f);
 	m_rightMasterDrive.SetVoltageRampRate(DRIVE_RAMP_VoltsPerSec);
